@@ -1,8 +1,9 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import libreria_funciones as lf
 
-from libreria_funciones_proyecto1 import flujo_caja_neto, precio_venta_final, produccion_real_linea
+from libreria_funciones_proyecto1 import flujo_caja_neto, precio_venta_final, produccion_real_linea, LoteProduccionTextil
 
 st.title("APLICACIÓN EN STREAMLIT")
 st.write("Elaborado por: **Jhonattan Josep Lezma Florida**")
@@ -215,4 +216,106 @@ elif item == "Ejercicio 3":
 
 ########################
 else:
-    st.subheader("Uso de clases desde una librería externa con CRUD")
+    st.subheader("Ejercicio 4 – Uso de clases desde una librería externa con CRUD")
+    st.markdown("""
+    Este módulo implementa un sistema **CRUD** utilizando la clase externa `LoteProduccionTextil`. 
+    Permite administrar la programación, el seguimiento de estados y la eliminación de órdenes de producción en planta.
+    """)
+
+    if "db_lotes" not in st.session_state:
+        st.session_state.db_lotes = {
+            "LOTE001": LoteProduccionTextil("LOTE001", "Algodón Pima", "Azul Marino", 1200, "En teñido"),
+            "LOTE002": LoteProduccionTextil("LOTE002", "Poliéster", "Negro", 2500, "Programado")
+        }
+
+    st.markdown("---")
+
+    # Implementación recomendada con st.tabs() para separar las operaciones CRUD de forma limpia
+    tab_crear, tab_leer, tab_actualizar, tab_eliminar = st.tabs(["➕ Crear Lote", "📋 Leer / Ver Tabla", "🔄 Actualizar Estado", "❌ Eliminar Lote"])
+
+    # ------------------ C - CREATE (CREAR) ------------------
+    with tab_crear:
+        st.markdown("### 📝 Registrar Nuevo Lote de Producción")
+        id_nuevo = st.text_input("Código de Lote único (Ej: LOTE003):").strip().upper()
+        tela_nueva = st.selectbox("Tipo de Tela:", ["Algodón Pima", "Jersey", "Rib", "Polystretch", "Denim"])
+        color_nuevo = st.text_input("Color de la tela:")
+        metros_nuevos = st.number_input("Cantidad de metros a producir:", min_value=1.0, step=100.0, format="%.2f")
+        
+        if st.button("Guardar Lote"):
+            if id_nuevo == "":
+                st.warning("Debe ingresar un código de lote válido.")
+            elif id_nuevo in st.session_state.db_lotes:
+                st.error("Ese código de lote ya existe. Ingrese uno diferente.")
+            elif color_nuevo.strip() == "":
+                st.warning("Debe especificar un color para el lote.")
+            else:
+                # Instanciamos la clase externa con los datos capturados de los widgets
+                nuevo_objeto_lote = LoteProduccionTextil(id_nuevo, tela_nueva, color_nuevo, metros_nuevos)
+                
+                # Lo guardamos en nuestro diccionario de sesión
+                st.session_state.db_lotes[id_nuevo] = nuevo_objeto_lote
+                st.success(f"✅ ¡Lote {id_nuevo} creado e instanciado con éxito!")
+                st.rerun()
+
+    # ------------------ R - READ (LEER) ------------------
+    with tab_leer:
+        st.markdown("### 📊 Tablero de Control de Lotes en Planta")
+        
+        if st.session_state.db_lotes:
+            # Extraemos los datos de los objetos para formatearlos en un DataFrame de Pandas
+            tabla_datos = []
+            for lote in st.session_state.db_lotes.values():
+                tabla_datos.append({
+                    "Código Lote": lote.id_lote,
+                    "Material / Tela": lote.tipo_tela,
+                    "Color": lote.color,
+                    "Metros Programados": lote.cantidad_metros,
+                    "Estado Actual": lote.estado
+                })
+            
+            df_lotes = pd.DataFrame(tabla_datos)
+            st.dataframe(df_lotes, use_container_width=True)
+        else:
+            st.info("No hay lotes registrados en este momento.")
+
+    # ------------------ U - UPDATE (ACTUALIZAR) ------------------
+    with tab_actualizar:
+        st.markdown("### 🔄 Modificar Parámetros de Lote Activo")
+        
+        if st.session_state.db_lotes:
+            id_a_modificar = st.selectbox("Seleccione el lote que desea modificar:", list(st.session_state.db_lotes.keys()))
+            lote_seleccionado = st.session_state.db_lotes[id_a_modificar]
+            
+            st.markdown(f"**Datos actuales del lote:** {lote_seleccionado.tipo_tela} ({lote_seleccionado.color})")
+            
+            # Formulario de actualización combinando inputs y métodos de la clase
+            nuevo_est = st.selectbox("Cambiar Estado Operativo:", ["Programado", "En teñido", "En corte", "En confección", "Terminado"])
+            nuevos_met = st.number_input("Corregir metros asignados:", min_value=1.0, value=lote_seleccionado.cantidad_metros, step=50.0)
+            
+            if st.button("Aplicar Cambios"):
+                # Ejecutamos los métodos internos del objeto instanciado
+                lote_seleccionado.actualizar_estado(nuevo_est)
+                lote_seleccionado.actualizar_cantidad(nuevos_met)
+                
+                st.success(f"🔄 ¡Lote {id_a_modificar} actualizado exitosamente!")
+                st.rerun()
+        else:
+            st.info("No hay lotes disponibles para actualizar.")
+
+    # ------------------ D - DELETE (ELIMINAR) ------------------
+    with tab_eliminar:
+        st.markdown("### ❌ Dar de Baja u Ordenar Retiro de Lote")
+        
+        if st.session_state.db_lotes:
+            id_a_eliminar = st.selectbox("Seleccione el lote que desea dar de baja:", list(st.session_state.db_lotes.keys()), key="del_box")
+            lote_eliminar = st.session_state.db_lotes[id_a_eliminar]
+            
+            st.warning(f"⚠️ ¿Está seguro de que desea eliminar permanentemente el lote **{id_a_eliminar}** de {lote_eliminar.tipo_tela}?")
+            
+            if st.button("Confirmar Eliminación", type="primary"):
+                # Eliminamos el registro del diccionario de datos
+                del st.session_state.db_lotes[id_a_eliminar]
+                st.error(f"💥 El lote {id_a_eliminar} fue removido del sistema.")
+                st.rerun()
+        else:
+            st.info("No hay lotes en el sistema para eliminar.")
