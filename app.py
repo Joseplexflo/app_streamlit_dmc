@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 
 st.title("APLICACIÓN EN STREAMLIT")
-st.sidebar.title("Parámetros")
+st.sidebar.title("Ejercicios")
 
 st.write("Elaborado por: Jhonattan Josep Lezma Florida")
 st.write("Módulo 1 – Python Fundamentals")
