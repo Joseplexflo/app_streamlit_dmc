@@ -11,7 +11,7 @@ st.sidebar.image("dmc_logo.png")
 if item == "Home":
   st.write("Módulo 1 – Python Fundamentals")
   st.write("Ingeniero de proyectos en empresa de exportación textil")
-  st.write("2026")
+  st.write("Mayo-2026")
   st.write("Este proyecto es el desarrollo de lo aprendio en el Módulo 1 – Python Fundamentals dictado por DMC")
   st.write("Tecnologías utilizadas: librerias numpy,")
   st.image("logo_personal.png")
