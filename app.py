@@ -5,6 +5,8 @@ st.title("APLICACIÓN EN STREAMLIT")
 st.sidebar.title("Ejercicios")
 
 st.write("Elaborado por: Jhonattan Josep Lezma Florida")
+st.sidebar.image("logo_personal.png")
+
 st.write("Módulo 1 – Python Fundamentals")
 
 st.write("Ingeniero jefe de proyectos en empresa de exportación textil")
