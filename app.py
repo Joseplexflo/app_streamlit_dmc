@@ -58,9 +58,7 @@ elif item == "Ejercicio 1":
 
         saldo_final = flujo_caja_neto(
             ingresos=total_ingresos, 
-            costos_operativos=total_gastos, 
-            impuestos=0.0, 
-            otros_gastos=0.0
+            costos_operativos=total_gastos
         )
 
         st.markdown("#### Resultado final del flujo de caja")
