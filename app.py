@@ -194,10 +194,11 @@ elif item == "Ejercicio 3":
                 # Guardar en la tabla histórica compartida
                 st.session_state.historico_ejercicio3.append({
                     "Función": funcion_seleccionada,
-                    "#Operarios": f"O{personas}",
+                    "#Operarios": f{personas}",
                     "SAM": f"{sam} min",
-                    "Dato Clave 2": f"Eficiencia: {eficiencia}% | Defectos: {defectos}%",
-                    "Resultado": f"{resultado_prendas:,.0f} Unidades"
+                    "%Ef.": f"{eficiencia}%",
+                    "5Def.": f"{defectos}%",
+                    "PRENDAS": f"{resultado_prendas:,.0f} pds"
                 })
                 st.toast("Cálculo de producción guardado.")
 
