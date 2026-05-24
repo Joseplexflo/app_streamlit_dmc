@@ -19,6 +19,7 @@ if item == "Home":
     st.write("**Tecnologías utilizadas:** librerias `numpy` y `streamlit`")
     st.image("logo_personal.png", width=250)
 
+########################
 elif item == "Ejercicio 1":
     st.subheader("Flujo de caja con listas")
     st.markdown("""
@@ -78,11 +79,59 @@ elif item == "Ejercicio 1":
             st.session_state.lista_movimientos = []
             st.rerun()
 
+########################
 elif item == "Ejercicio 2":
-    st.subheader("Registro con NumPy, arrays y DataFrame")
-      
+    # Una breve descripción del ejercicio
+    st.subheader("Ejercicio 2 – Registro con NumPy, arrays y DataFrame")
+    st.markdown("""
+    Este módulo permite registrar información de productos mediante un formulario. 
+    Los datos ingresados se almacenan temporalmente en arreglos de NumPy y luego 
+    se convierten en un DataFrame de Pandas para mostrar la tabla actualizada.
+    """)
+
+    if "lista_registros" not in st.session_state:
+        st.session_state.lista_registros = []
+
+    st.markdown("---")
+
+    # El formulario de ingreso de datos
+    st.markdown("### 📝 Ingreso de productos")
+    
+    nombre_producto = st.text_input("Nombre del producto:")
+    categoria = st.selectbox("Categoría:", ["Electrónica", "Abarrotes", "Limpieza", "Ropa", "Otros"])
+    precio = st.number_input("Precio:", min_value=0.0, step=1.0, format="%.2f")
+    cantidad = st.number_input("Cantidad:", min_value=1, step=1)
+
+    if st.button("Agregar registro"):
+        if nombre_producto.strip() == "":
+            st.warning("Debe ingresar el nombre del producto.")
+        elif precio <= 0:
+            st.warning("El precio debe ser mayor a 0.")
+        else:
+            total = precio * cantidad
+
+            st.session_state.lista_registros.append([nombre_producto, categoria, precio, cantidad, total])
+            st.success("Registro agregado exitosamente.")
+
+    if st.session_state.lista_registros:
+        st.markdown("---")
+        st.markdown("### 📦 Datos registrados")
+        
+        arreglo_numpy = np.array(st.session_state.lista_registros, dtype=object)
+        
+        nombres_columnas = ["Nombre del producto", "Categoría", "Precio", "Cantidad", "Total"]
+        df_registros = pd.DataFrame(arreglo_numpy, columns=nombres_columnas)
+        
+        st.dataframe(df_registros, use_container_width=True)
+
+        if st.button("Reiniciar tabla"):
+            st.session_state.lista_registros = []
+            st.rerun()
+
+########################
 elif item == "Ejercicio 3":
     st.subheader("Uso de funciones desde una librería externa")
 
+########################
 else:
     st.subheader("Uso de clases desde una librería externa con CRUD")
