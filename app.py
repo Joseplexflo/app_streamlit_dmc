@@ -194,7 +194,7 @@ elif item == "Ejercicio 3":
                 # Guardar en la tabla histórica compartida
                 st.session_state.historico_ejercicio3.append({
                     "Función": funcion_seleccionada,
-                    "#Operarios": f{personas}",
+                    "#Operarios": f"{personas}",
                     "SAM": f"{sam} min",
                     "%Ef.": f"{eficiencia}%",
                     "5Def.": f"{defectos}%",
