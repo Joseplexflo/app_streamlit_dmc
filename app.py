@@ -60,22 +60,22 @@ elif item == "Ejercicio 1":
             otros_gastos=0.0
   )
 
-st.markdown("#### Resultado final del flujo de caja")
-        col1, col2, col3 = st.columns(3)
-        col1.metric(label="Total de Ingresos", value=f"S/. {total_ingresos:,.2f}")
-        col2.metric(label="Total de Gastos", value=f"S/. {total_gastos:,.2f}")
-        col3.metric(label="Saldo Final", value=f"S/. {saldo_final:,.2f}")
-
-        # Indicación de si el flujo de caja está a favor o en contra con st.success() o st.error()
-        if saldo_final >= 0:
-            st.success("El flujo de caja está: A FAVOR")
-        else:
-            st.error("El flujo de caja está: EN CONTRA")
-            
-        # Botón para limpiar y reiniciar la lista en la interfaz
-        if st.button("Reiniciar ejercicio"):
-            st.session_state.lista_movimientos = []
-            st.rerun()
+  st.markdown("#### Resultado final del flujo de caja")
+    col1, col2, col3 = st.columns(3)
+    col1.metric(label="Total de Ingresos", value=f"S/. {total_ingresos:,.2f}")
+    col2.metric(label="Total de Gastos", value=f"S/. {total_gastos:,.2f}")
+    col3.metric(label="Saldo Final", value=f"S/. {saldo_final:,.2f}")
+  
+  # Indicación de si el flujo de caja está a favor o en contra con st.success() o st.error()
+  if saldo_final >= 0:
+    st.success("El flujo de caja está: A FAVOR")
+  else:
+    st.error("El flujo de caja está: EN CONTRA")
+          
+  # Botón para limpiar y reiniciar la lista en la interfaz
+  if st.button("Reiniciar ejercicio"):
+    st.session_state.lista_movimientos = []
+    st.rerun()
 
 
 elif item == "Ejercicio 2":
