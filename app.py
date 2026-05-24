@@ -10,5 +10,5 @@ st.write("Módulo 1 – Python Fundamentals")
 st.write("Ingeniero jefe de proyectos en empresa de exportación textil")
 
 st.write("2026")
-st.wrtie("Este proyecto es el desarrollo de lo aprendio en el Módulo 1 – Python Fundamentals dictado por DMC")
+st.write("Este proyecto es el desarrollo de lo aprendio en el Módulo 1 – Python Fundamentals dictado por DMC")
 st.write("Tecnologías utilizadas: librerias numpy,")
