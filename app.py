@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 from libreria_funciones import flujo_caja_neto
+from libreria_funciones_proyecto1 import flujo_caja_neto, precio_venta_final
 
 st.title("APLICACIÓN EN STREAMLIT")
 st.write("Elaborado por: **Jhonattan Josep Lezma Florida**")
