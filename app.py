@@ -2,32 +2,32 @@ import streamlit as st
 import numpy as np
 
 st.title("APLICACIÓN EN STREAMLIT")
-st.write("Elaborado por: Jhonattan Josep Lezma Florida")
+st.write("Elaborado por: **Jhonattan Josep Lezma Florida**")
 
 st.sidebar.title("Ejercicios")
 item = st.sidebar.selectbox("Seleccione un item:", ["Home","Ejercicio 1","Ejercicio 2","Ejercicio 3","Ejercicio 4"])
-st.sidebar.image("dmc_logo.png")
+st.sidebar.image("dmc_logo.png",use_container_width=True)
 
 if item == "Home":
   st.write("Módulo 1 – Python Fundamentals")
-  st.write("Ingeniero de proyectos en empresa de exportación textil")
-  st.write("Mayo-2026")
+  st.write("**Profesión:** Ingeniero de proyectos en empresa de exportación textil")
+  st.write("**Fecha:** Mayo-2026")
   st.write("Este proyecto es el desarrollo de lo aprendio en el Módulo 1 – Python Fundamentals dictado por DMC")
-  st.write("Tecnologías utilizadas: librerias numpy,")
-  st.image("logo_personal.png")
+  st.write("**Tecnologías utilizadas:** librerias `numpy` y `streamlit`")
+  st.image("logo_personal.png",width=250)
 
 elif item == "Ejercicio 1":
-  st.write("Flujo de caja con listas")
+  st.subheader("Flujo de caja con listas")
   
   
 elif item == "Ejercicio 2":
-  st.write("Registro con NumPy, arrays y DataFrame")
+  st.subheader("Registro con NumPy, arrays y DataFrame")
     
   
 elif item == "Ejercicio 3":
-  st.write("Uso de funciones desde una librería externa")
+  st.subheader("Uso de funciones desde una librería externa")
     
 
 else:
-  st.write("Uso de clases desde una librería externa con CRUD")
+  st.subheader("Uso de clases desde una librería externa con CRUD")
   
