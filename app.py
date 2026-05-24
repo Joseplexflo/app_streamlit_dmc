@@ -130,7 +130,60 @@ elif item == "Ejercicio 2":
 
 ########################
 elif item == "Ejercicio 3":
-    st.subheader("Uso de funciones desde una librería externa")
+    # Una breve descripción del ejercicio
+    st.subheader("Ejercicio 3 – Uso de funciones desde una librería externa")
+    st.markdown("""
+    Este módulo conecta una función de negocio con la interfaz gráfica. Evaluando el rol de 
+    **Ingeniero de proyectos en exportación textil**, se ha seleccionado la función `precio_venta_final` 
+    para determinar el precio de salida de mercancías aplicando márgenes, descuentos e impuestos.
+    """)
+
+    if "historico_precios" not in st.session_state:
+        st.session_state.historico_precios = []
+
+    st.markdown("---")
+
+    funcion_seleccionada = st.selectbox(
+        "Seleccione una función relacionada con su área de formación o trabajo:",
+        ["precio_venta_final"]
+    )
+
+    if funcion_seleccionada == "precio_venta_final":
+        st.markdown("### 📊 Parámetros de Cotización Textil")
+        
+        # • Widgets para ingresar parámetros (st.number_input)
+        costo_base = st.number_input("Costo base de producción (USD o S/.):", min_value=0.0, step=10.0, format="%.2f")
+        margen_ganancia_pct = st.number_input("Margen de ganancia deseado (%):", min_value=0.0, max_value=100.0, step=5.0)
+        descuento_pct = st.number_input("Descuento comercial aplicado (%):", min_value=0.0, max_value=100.0, step=1.0)
+        iva_pct = st.number_input("IVA / Impuesto de exportación (%):", min_value=0.0, max_value=100.0, step=1.0)
+
+        if st.button("Ejecutar función"):
+            if costo_base <= 0:
+                st.warning("El costo base debe ser mayor a cero para realizar el cálculo.")
+            else:
+                resultado_precio = precio_venta_final(costo_base, margen_ganancia_pct, descuento_pct, iva_pct)
+                
+                st.write(f"### 💰 Precio de Venta Final: S/. {resultado_precio:,.2f}")
+                
+                st.session_state.historico_precios.append({
+                    "Función Ejecutada": funcion_seleccionada,
+                    "Costo Base": costo_base,
+                    "Margen (%)": margen_ganancia_pct,
+                    "Descuento (%)": descuento_pct,
+                    "IVA (%)": iva_pct,
+                    "Resultado Final": resultado_precio
+                })
+                st.toast("Cálculo guardado en el histórico.")
+
+        if st.session_state.historico_precios:
+            st.markdown("---")
+            st.markdown("### ⏳ Tabla histórica de resultados obtenidos")
+            df_historico = pd.DataFrame(st.session_state.historico_precios)
+            st.dataframe(df_historico, use_container_width=True)
+            
+            if st.button("Limpiar histórico"):
+                st.session_state.historico_precios = []
+                st.rerun()
 
 ########################
 else:
