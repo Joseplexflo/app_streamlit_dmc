@@ -83,7 +83,7 @@ elif item == "Ejercicio 1":
 ########################
 elif item == "Ejercicio 2":
     # Una breve descripción del ejercicio
-    st.subheader("Ejercicio 2 – Registro con NumPy, arrays y DataFrame")
+    st.subheader("Registro con NumPy, arrays y DataFrame")
     st.markdown("""
     Este módulo permite registrar información de productos mediante un formulario. 
     Los datos ingresados se almacenan temporalmente en arreglos de NumPy y luego 
@@ -131,7 +131,7 @@ elif item == "Ejercicio 2":
 
 ########################
 elif item == "Ejercicio 3":
-    st.subheader("Ejercicio 3 – Uso de funciones desde una librería externa")
+    st.subheader("Uso de funciones desde una librería externa")
     st.markdown("""
     Este módulo conecta funciones de ingeniería de proyectos y manufactura textil con la interfaz gráfica, 
     permitiendo evaluar escenarios de cotización o calcular la productividad real de una línea.
@@ -216,7 +216,7 @@ elif item == "Ejercicio 3":
 
 ########################
 else:
-    st.subheader("Ejercicio 4 – Uso de clases desde una librería externa con CRUD")
+    st.subheader("Uso de clases desde una librería externa con CRUD")
     st.markdown("""
     Este módulo implementa un sistema **CRUD** utilizando la clase externa `LoteProduccionTextil`. 
     Permite administrar la programación, el seguimiento de estados y la eliminación de órdenes de producción en planta.
