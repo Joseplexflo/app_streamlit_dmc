@@ -5,8 +5,6 @@ st.title("APLICACIÓN EN STREAMLIT")
 st.write("Elaborado por: Jhonattan Josep Lezma Florida")
 
 st.sidebar.title("Ejercicios")
-st.sidebar.image("logo_personal.png")
-
 item = st.sidebar.selectbox("Seleccione un item:", ["Home","Ejercicio 1","Ejercicio 2","Ejercicio 3","Ejercicio 4"])
 st.sidebar.image("dmc_logo.png")
 
