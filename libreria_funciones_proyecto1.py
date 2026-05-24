@@ -11,9 +11,7 @@ def precio_venta_final(costo_base, margen_ganancia_pct, descuento_pct, iva_pct):
     return precio_con_descuento * (1 + iva_pct / 100)
 
 def produccion_real_linea(minutos_disponibles, eficiencia_pct, tiempo_estandar, defectos_pct, num_personas):
-    """
-    Calcula la producción neta real de una línea de confección textil.
-    """
+    """Calcula la producción neta real de una línea de confección textil."""
     if tiempo_estandar <= 0 or num_personas <= 0:
         return 0.0
         
