@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 
-from libreria_funciones_proyecto1 import flujo_caja_neto, precio_venta_final
+from libreria_funciones_proyecto1 import flujo_caja_neto, precio_venta_final, produccion_real_linea
 
 st.title("APLICACIÓN EN STREAMLIT")
 st.write("Elaborado por: **Jhonattan Josep Lezma Florida**")
@@ -130,60 +130,86 @@ elif item == "Ejercicio 2":
 
 ########################
 elif item == "Ejercicio 3":
-    # Una breve descripción del ejercicio
     st.subheader("Ejercicio 3 – Uso de funciones desde una librería externa")
     st.markdown("""
-    Este módulo conecta una función de negocio con la interfaz gráfica. Evaluando el rol de 
-    **Ingeniero de proyectos en exportación textil**, se ha seleccionado la función `precio_venta_final` 
-    para determinar el precio de salida de mercancías aplicando márgenes, descuentos e impuestos.
+    Este módulo conecta funciones de ingeniería de proyectos y manufactura textil con la interfaz gráfica, 
+    permitiendo evaluar escenarios de cotización o calcular la productividad real de una línea.
     """)
 
-    if "historico_precios" not in st.session_state:
-        st.session_state.historico_precios = []
+    if "historico_ejercicio3" not in st.session_state:
+        st.session_state.historico_ejercicio3 = []
 
     st.markdown("---")
 
+    # • Selector de función con las dos opciones de tu rubro
     funcion_seleccionada = st.selectbox(
         "Seleccione una función relacionada con su área de formación o trabajo:",
-        ["precio_venta_final"]
+        ["precio_venta_final", "produccion_real_linea"]
     )
 
+    # ==================== CASO 1: PRECIO DE VENTA ====================
     if funcion_seleccionada == "precio_venta_final":
         st.markdown("### 📊 Parámetros de Cotización Textil")
-        
-        # • Widgets para ingresar parámetros (st.number_input)
-        costo_base = st.number_input("Costo base de producción (USD o S/.):", min_value=0.0, step=10.0, format="%.2f")
+        costo_base = st.number_input("Costo base de producción:", min_value=0.0, step=10.0, format="%.2f")
         margen_ganancia_pct = st.number_input("Margen de ganancia deseado (%):", min_value=0.0, max_value=100.0, step=5.0)
         descuento_pct = st.number_input("Descuento comercial aplicado (%):", min_value=0.0, max_value=100.0, step=1.0)
-        iva_pct = st.number_input("IVA / Impuesto de exportación (%):", min_value=0.0, max_value=100.0, step=1.0)
+        iva_pct = st.number_input("IVA / Impuesto (%):", min_value=0.0, max_value=100.0, step=1.0)
 
         if st.button("Ejecutar función"):
             if costo_base <= 0:
-                st.warning("El costo base debe ser mayor a cero para realizar el cálculo.")
+                st.warning("El costo base debe ser mayor a cero.")
             else:
-                resultado_precio = precio_venta_final(costo_base, margen_ganancia_pct, descuento_pct, iva_pct)
+                resultado = precio_venta_final(costo_base, margen_ganancia_pct, descuento_pct, iva_pct)
+                st.write(f"### 💰 Precio de Venta Final: S/. {resultado:,.2f}")
                 
-                st.write(f"### 💰 Precio de Venta Final: S/. {resultado_precio:,.2f}")
-                
-                st.session_state.historico_precios.append({
-                    "Función Ejecutada": funcion_seleccionada,
-                    "Costo Base": costo_base,
-                    "Margen (%)": margen_ganancia_pct,
-                    "Descuento (%)": descuento_pct,
-                    "IVA (%)": iva_pct,
-                    "Resultado Final": resultado_precio
+                st.session_state.historico_ejercicio3.append({
+                    "Función": funcion_seleccionada,
+                    "Dato Clave 1": f"Costo: S/. {costo_base}",
+                    "Dato Clave 2": f"Margen: {margen_ganancia_pct}%",
+                    "Resultado": f"S/. {resultado:,.2f}"
                 })
-                st.toast("Cálculo guardado en el histórico.")
+                st.toast("Cálculo guardado.")
 
-        if st.session_state.historico_precios:
-            st.markdown("---")
-            st.markdown("### ⏳ Tabla histórica de resultados obtenidos")
-            df_historico = pd.DataFrame(st.session_state.historico_precios)
-            st.dataframe(df_historico, use_container_width=True)
-            
-            if st.button("Limpiar histórico"):
-                st.session_state.historico_precios = []
-                st.rerun()
+    # ==================== CASO 2: PRODUCCIÓN DE LÍNEA ====================
+    elif funcion_seleccionada == "produccion_real_linea":
+        st.markdown("### ⚙️ Control de Producción en Línea")
+        
+        # Parámetros solicitados por el ejercicio adaptados a widgets
+        min_disponibles = st.number_input("Minutos disponibles por operario (ej. 480 para un turno):", min_value=0.0, step=10.0, format="%.1f")
+        eficiencia = st.number_input("Eficiencia de la línea (%):", min_value=0.0, max_value=100.0, value=85.0, step=5.0)
+        sam = st.number_input("Tiempo estándar por prenda / SAM (minutos):", min_value=0.01, step=0.5, format="%.2f")
+        defectos = st.number_input("Porcentaje de prendas defectuosas / mermas (%):", min_value=0.0, max_value=100.0, value=2.0, step=0.5)
+        personas = st.number_input("Cantidad de personas en la línea:", min_value=1, step=1, value=10)
+
+        if st.button("Ejecutar función"):
+            if min_disponibles <= 0 or sam <= 0:
+                st.warning("Los minutos disponibles y el tiempo estándar deben ser mayores a cero.")
+            else:
+                # Ejecutar la función matemática de la línea textil
+                resultado_prendas = produccion_real_linea(min_disponibles, eficiencia, sam, defectos, personas)
+                
+                # Mostrar resultado en pantalla
+                st.write(f"### 📦 Producción Real Estimada: {resultado_prendas:,.0f} unidades netas")
+                
+                # Guardar en la tabla histórica compartida
+                st.session_state.historico_ejercicio3.append({
+                    "Función": funcion_seleccionada,
+                    "Dato Clave 1": f"Operarios: {personas} (SAM: {sam} min)",
+                    "Dato Clave 2": f"Eficiencia: {eficiencia}% | Defectos: {defectos}%",
+                    "Resultado": f"{resultado_prendas:,.0f} Unidades"
+                })
+                st.toast("Cálculo de producción guardado.")
+
+    # • Tabla histórica común para visualizar los resultados obtenidos
+    if st.session_state.historico_ejercicio3:
+        st.markdown("---")
+        st.markdown("### ⏳ Tabla histórica de resultados obtenidos")
+        df_historico = pd.DataFrame(st.session_state.historico_ejercicio3)
+        st.dataframe(df_historico, use_container_width=True)
+        
+        if st.button("Limpiar histórico"):
+            st.session_state.historico_ejercicio3 = []
+            st.rerun()
 
 ########################
 else:
